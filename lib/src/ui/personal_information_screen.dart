@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:gin_finans_app/src/blocs/personal_information_bloc.dart';
 import 'package:gin_finans_app/src/listeners/sub_screen_callback_listener.dart';
-import 'package:gin_finans_app/src/repositories/data_model.dart';
 import 'package:gin_finans_app/src/repositories/monthly_expense_model.dart';
+import 'package:gin_finans_app/src/repositories/provider.dart';
 import 'package:gin_finans_app/src/ui/custom_ui/custom_dropdown.dart';
 import 'package:gin_finans_app/src/values/dimensions.dart';
 
@@ -20,16 +18,22 @@ class PersonalInformationScreen extends StatefulWidget {
 }
 
 class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
-  String? _selectedGoalItem;
-  String? _selectedMonthlyIncomeRange;
-  String? _selectedMonthlyExpense;
+  @override
+  void initState() {
+    super.initState();
+    bloc.fetchAllMovies();
+  }
 
-  DataModel? _model;
+  @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<DataModel>(
-      future: getDropDownDataModel(),
+    return StreamBuilder<DataProvider>(
+      stream: bloc.allMovies,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Container(
@@ -58,10 +62,10 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                               CustomDropDown(
                                 hint: 'Goal for activation',
                                 dropdownMenuItems: buildDropDownMenuItems(snapshot.data!.goalOfActivation),
-                                selectedItem: _selectedGoalItem ?? null,
+                                selectedItem: bloc.selectedGoalItem ?? null,
                                 callBack: (selectedValue) {
                                   setState(() {
-                                    _selectedGoalItem = selectedValue;
+                                    bloc.selectedGoalItem = selectedValue;
                                   });
                                 },
                               ),
@@ -71,10 +75,10 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                               CustomDropDown(
                                 hint: 'Monthly Income',
                                 dropdownMenuItems: buildDropDownMenuItems(snapshot.data!.monthlyIncome),
-                                selectedItem: _selectedMonthlyIncomeRange ?? null,
+                                selectedItem: bloc.selectedMonthlyIncomeRange ?? null,
                                 callBack: (selectedValue) {
                                   setState(() {
-                                    _selectedMonthlyIncomeRange = selectedValue;
+                                    bloc.selectedMonthlyIncomeRange = selectedValue;
                                   });
                                 },
                               ),
@@ -84,10 +88,10 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                               CustomDropDown(
                                 hint: 'Monthly Expense',
                                 dropdownMenuItems: buildDropDownMenuItems(snapshot.data!.monthlyExpense),
-                                selectedItem: _selectedMonthlyExpense ?? null,
+                                selectedItem: bloc.selectedMonthlyExpense ?? null,
                                 callBack: (selectedValue) {
                                   setState(() {
-                                    _selectedMonthlyExpense = selectedValue;
+                                    bloc.selectedMonthlyExpense = selectedValue;
                                   });
                                 },
                               ),
@@ -107,6 +111,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
               ],
             ),
           );
+        } else if (snapshot.hasError) {
+          return Text(snapshot.error.toString());
         } else {
           return Text('Error while loading data');
         }
@@ -125,19 +131,5 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
       );
     }
     return items;
-  }
-
-  bool isValidFields() {
-    if (_selectedMonthlyExpense != null && _selectedGoalItem != null && _selectedMonthlyIncomeRange != null) {
-      return _selectedMonthlyExpense!.isNotEmpty && _selectedGoalItem!.isNotEmpty && _selectedMonthlyIncomeRange!.isNotEmpty;
-    } else
-      return false;
-  }
-
-  Future<DataModel> getDropDownDataModel() async {
-    String string = await rootBundle.loadString('assets/data.json');
-    Map<String, dynamic> values = json.decode(string);
-    _model = DataModel.fromJson(values);
-    return _model!;
   }
 }

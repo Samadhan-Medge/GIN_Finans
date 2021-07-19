@@ -18,6 +18,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  rxdart: ^0.27.1
 
 # The following section is specific to Flutter.
 flutter:
