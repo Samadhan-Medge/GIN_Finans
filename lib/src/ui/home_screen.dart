@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:gin_finans_app/src/ui/semi_half_circle_clipper.dart';
+import 'package:gin_finans_app/src/listeners/sub_screen_callback_listener.dart';
+import 'package:gin_finans_app/src/ui/email_registration_screen.dart';
+import 'package:gin_finans_app/src/ui/personal_information_screen.dart';
+import 'package:gin_finans_app/src/ui/schedule_video_call_screen.dart';
+import 'package:gin_finans_app/src/values/app_colors.dart';
+
+import 'create_password_screen.dart';
+import 'custom_ui/stepper_view_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key, required this.title}) : super(key: key);
@@ -9,41 +16,97 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+class _HomeScreenState extends State<HomeScreen> with SubScreenCallbackListener {
+  int _index = 0;
+  List<StepperViewStep> _stepInfoList = [
+    StepperViewStep(isActive: false, state: StepperViewStepState.indexed),
+    StepperViewStep(isActive: false, state: StepperViewStepState.indexed),
+    StepperViewStep(isActive: false, state: StepperViewStepState.indexed),
+    StepperViewStep(isActive: false, state: StepperViewStepState.indexed),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      appBar: _index != 0
+          ? AppBar(
+              title: Text("Create Account", style: Theme.of(context).textTheme.headline3),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              shadowColor: Colors.transparent,
+              leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    goToPreviousStep();
+                  }),
+            )
+          : null,
+      body: Container(
+        color: Theme.of(context).colorScheme.background,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SemiHalfCircleClipper(topHeight: 50, holeRadius: 10),
-            Text(
-              'You have pushed the button this many times:',
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Visibility(visible:_index == 0,child: Container(height: 50, color: Theme.of(context).colorScheme.primary)),
+            StepperView(
+              physics: const BouncingScrollPhysics(),
+              currentStep: _index,
+              onStepTapped: (index) {
+                setState(() {
+                  _index = index;
+                });
+              },
+              steps: _stepInfoList,
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            Expanded(child: getCurrentScreen(_index)),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  void goToPreviousStep() {
+    if (_index > 0) {
+      setState(() {
+        _index--;
+        _stepInfoList[_index].state = StepperViewStepState.indexed;
+      });
+    }
+  }
+
+  void goToNextStep() {
+    setState(() {
+      _stepInfoList[_index].state = StepperViewStepState.complete;
+      _index++;
+    });
+  }
+
+  /*
+   * Method to return current screen to replace at container basis on index
+   */
+  Widget getCurrentScreen(int index) {
+    switch (index) {
+      case 0:
+        return EmailRegistrationScreen(subScreenCallbackListener: this);
+      case 1:
+        return CreatePasswordScreen(subScreenCallbackListener: this);
+      case 2:
+        return PersonalInformationScreen(subScreenCallbackListener: this);
+      case 3:
+        return ScheduleVideoCallScreen(subScreenCallbackListener: this);
+      default:
+        return Container();
+    }
+  }
+
+  @override
+  redirectToNextScreen(int currentScreenIndex) {
+    goToNextStep();
+  }
+
+  @override
+  redirectToPreviousScreen(int currentScreenIndex) {
+    _index = currentScreenIndex - 1;
+    goToPreviousStep();
   }
 }
