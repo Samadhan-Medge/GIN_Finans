@@ -111,7 +111,7 @@ class InputFieldArea extends StatelessWidget {
           initialValue: initialValue,
           onTap: () => selectedValue(context),
           keyboardType: inputType,
-          style: Theme.of(context).textTheme.headline5!.copyWith(color: AppColors.labelBlack),
+          style: Theme.of(context).textTheme.bodyText1!.copyWith(color: AppColors.labelBlack),
           controller: textEditingController,
           focusNode: firstFocus,
           maxLines: maxLines != null ? maxLines : 1,

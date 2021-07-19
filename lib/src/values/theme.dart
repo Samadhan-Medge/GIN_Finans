@@ -29,7 +29,7 @@ class CustomThemeData {
       ),
       headline4: TextStyle(
         color: AppColors.labelBlack,
-        fontSize: AppDimensions.textSizeSmall,
+        fontSize: AppDimensions.textSizeXXExtraLarge,
         fontStyle: FontStyle.normal,
       ),
       headline5: TextStyle(
@@ -72,9 +72,9 @@ class CustomThemeData {
         secondary: AppColors.colorPrimary,
         secondaryVariant: AppColors.colorPrimary,
         background: AppColors.colorPrimary,
-        onBackground:AppColors.colorPrimary,
-        surface:AppColors.colorPrimary,
-        onSurface: AppColors.lightBlue,
+        onBackground:AppColors.colorWhite,
+        surface:AppColors.colorWhite,
+        onSurface: AppColors.colorPrimary,
         onError: AppColors.fieldErrorTextColor,
         onPrimary: Colors.white,
         onSecondary: Colors.grey,

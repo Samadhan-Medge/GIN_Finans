@@ -53,7 +53,40 @@ class _ScheduleVideoCallScreenState extends State<ScheduleVideoCallScreen> with 
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
             child: Stack(
               children: [
-                showCalenderIcon(),
+                Container(
+                  height: 100,
+                  width: 70,
+                  alignment: Alignment.centerLeft,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: AnimatedBuilder(
+                      animation: _animationController!,
+                      builder: (context, child) {
+                        return Container(
+                          decoration: ShapeDecoration(
+                            color: Colors.white.withOpacity(0.5),
+                            shape: CircleBorder(),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(10.0 * _animationController!.value),
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: CircleBorder(),
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          color: Colors.blue,
+                          icon: Icon(Icons.date_range_sharp, size: 24),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -170,35 +203,6 @@ class _ScheduleVideoCallScreenState extends State<ScheduleVideoCallScreen> with 
       initialTime: selectedTime,
     );
     if (picked != null) _updateTimeFunction(picked);
-  }
-
-  showCalenderIcon() {
-    return AnimatedBuilder(
-      animation: _animationController!,
-      builder: (context, child) {
-        return Container(
-          decoration: ShapeDecoration(
-            color: Colors.white.withOpacity(0.5),
-            shape: CircleBorder(),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(8.0 * _animationController!.value),
-            child: child,
-          ),
-        );
-      },
-      child: Container(
-        decoration: ShapeDecoration(
-          color: Colors.white,
-          shape: CircleBorder(),
-        ),
-        child: IconButton(
-          onPressed: () {},
-          color: Colors.blue,
-          icon: Icon(Icons.date_range_sharp, size: 24),
-        ),
-      ),
-    );
   }
 
   void _updateDateFunction(DateTime newDateTime) {
