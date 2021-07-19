@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gin_finans_app/src/blocs/email_registration_bloc.dart';
 import 'package:gin_finans_app/src/listeners/sub_screen_callback_listener.dart';
 import 'package:gin_finans_app/src/ui/custom_ui/next_button.dart';
 import 'package:gin_finans_app/src/values/app_colors.dart';
@@ -19,6 +20,8 @@ class EmailRegistrationScreen extends StatefulWidget {
 
 class _EmailRegistrationScreenState extends State<EmailRegistrationScreen> {
   TextEditingController _emailController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool? isEmailValid;
 
   @override
   Widget build(BuildContext context) {
@@ -38,64 +41,73 @@ class _EmailRegistrationScreenState extends State<EmailRegistrationScreen> {
                   children: [
                     Container(
                       color: AppColors.lightBlue,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomPaint(
-                            child: Container(
-                              width: double.infinity,
-                              height: 50.0,
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomPaint(
+                              child: Container(
+                                width: double.infinity,
+                                height: 50.0,
+                              ),
+                              painter: CustomPath(color: Theme.of(context).colorScheme.primary, radius: AppDimensions.clipperViewRadius),
                             ),
-                            painter: CustomPath(color: Theme.of(context).colorScheme.primary, radius: AppDimensions.clipperViewRadius),
-                          ),
-                          SizedBox(
-                            height: 50,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(AppDimensions.fieldSpacing),
-                            child: RichText(
-                              text: TextSpan(
-                                  text: 'Welcome to\nGIN ',
-                                  style: Theme.of(context).textTheme.headline1!.copyWith(color: AppColors.labelBlack, fontWeight: FontWeight.bold),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: 'Finans',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline1!
-                                          .copyWith(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
-                                    )
-                                  ]),
+                            SizedBox(
+                              height: 50,
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: AppDimensions.fieldSpacing),
-                            child: Text(
-                              "Welcome to The Bank of The Future. Manage and track yours accounts on th go",
-                              style: Theme.of(context).textTheme.bodyText1!.copyWith(color: AppColors.labelBlack),
+                            Padding(
+                              padding: const EdgeInsets.all(AppDimensions.fieldSpacing),
+                              child: RichText(
+                                text: TextSpan(
+                                    text: 'Welcome to\nGIN ',
+                                    style: Theme.of(context).textTheme.headline1!.copyWith(color: AppColors.labelBlack, fontWeight: FontWeight.bold),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: 'Finans',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline1!
+                                            .copyWith(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+                                      )
+                                    ]),
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(AppDimensions.fieldSpacing),
-                            child: InputFieldArea(
-                                hint: "Email",
-                                obscure: false,
-                                textEditingController: _emailController,
-                                maxLength: 64,
-                                isEmpty: true,
-                                textAction: TextInputAction.go,
-                                onValueChanged: (newValue) {},
-                                onFieldError: (newFocus) {},
-                                inputType: TextInputType.emailAddress,
-                                prefixIcon: IconButton(
-                                  icon: Icon(
-                                    Icons.email_outlined,
-                                    color: AppColors.darkGrey,
-                                  ),
-                                  onPressed: () {},
-                                )),
-                          ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: AppDimensions.fieldSpacing),
+                              child: Text(
+                                "Welcome to The Bank of The Future. Manage and track yours accounts on th go",
+                                style: Theme.of(context).textTheme.bodyText1!.copyWith(color: AppColors.labelBlack),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(AppDimensions.fieldSpacing),
+                              child: InputFieldArea(
+                                  hint: 'Email',
+                                  obscure: false,
+                                  textEditingController: _emailController,
+                                  maxLength: 64,
+                                  isEmpty: true,
+                                  textAction: TextInputAction.go,
+                                  onValueChanged: (newValue) {},
+                                  onFieldError: (newFocus) {},
+                                  inputType: TextInputType.emailAddress,
+                                  validator: (text) {
+                                    if (text == null || text.toString().isEmpty)
+                                      return 'Please enter email';
+                                    else if (isEmailValid != null && !isEmailValid!) return 'Email id is not valid';
+                                    return null;
+                                  },
+                                  prefixIcon: IconButton(
+                                    icon: Icon(
+                                      Icons.email_outlined,
+                                      color: AppColors.darkGrey,
+                                    ),
+                                    onPressed: () {},
+                                  )),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -106,7 +118,12 @@ class _EmailRegistrationScreenState extends State<EmailRegistrationScreen> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: NextButton(onClick: () {
-                widget.subScreenCallbackListener.redirectToNextScreen(0);
+                if (bloc.validateEmailId(_emailController.text))
+                  widget.subScreenCallbackListener.redirectToNextScreen(0);
+                else {
+                  isEmailValid = false;
+                  _formKey.currentState!.validate();
+                }
               }),
             ),
           ),
