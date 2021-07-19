@@ -32,6 +32,7 @@ class InputFieldArea extends StatelessWidget {
   final RegExp? regex;
   final RegExp? onlyNumberRegex;
   final String? regexError;
+  FormFieldValidator<String>? validator;
   int? maxLength;
   int? maxLines;
   String? counterText;
@@ -58,6 +59,7 @@ class InputFieldArea extends StatelessWidget {
       this.maxLines,
       this.counterText,
       this.regex,
+      this.validator,
       this.onlyNumberRegex,
       this.textCapitalization,
       this.initialValue,
@@ -129,7 +131,7 @@ class InputFieldArea extends StatelessWidget {
             onValueChanged!(newVale!.trim());
           },
           textInputAction: textAction,
-          validator: (String? val) => getValidate(val!.trim()),
+          validator: validator??(String? val) => getValidate(val!.trim()),
           decoration: AppInputDecoration().getDecoration(
               prefix: prefixText ?? '',
               prefixIcon: prefixIcon ?? null,
