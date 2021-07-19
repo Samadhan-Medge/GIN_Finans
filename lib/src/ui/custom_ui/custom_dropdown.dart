@@ -6,7 +6,7 @@ import 'input_decoration.dart';
 class CustomDropDown extends StatelessWidget {
   final String hint;
   final String? dropdownHint;
-  final String selectedItem;
+  final String? selectedItem;
   final List<DropdownMenuItem<String>> dropdownMenuItems;
   final DropDownCallBack callBack;
 
