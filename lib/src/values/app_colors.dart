@@ -10,4 +10,8 @@ class AppColors{
   static Color labelBlack = Color(0xFF000000);
   static Color darkGrey = Colors.grey[500]!;
   static Color lightBlue = Colors.blue[50]!;
+  static Color colorPasswordCompxityStrong = Colors.green;
+  static Color colorPasswordCompxityGood = Colors.tealAccent;
+  static Color colorPasswordCompxityWeak = Colors.orange;
+  static Color colorPasswordCompxityVeryWeak = Colors.red;
 }
