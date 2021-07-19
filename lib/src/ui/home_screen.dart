@@ -3,7 +3,6 @@ import 'package:gin_finans_app/src/listeners/sub_screen_callback_listener.dart';
 import 'package:gin_finans_app/src/ui/email_registration_screen.dart';
 import 'package:gin_finans_app/src/ui/personal_information_screen.dart';
 import 'package:gin_finans_app/src/ui/schedule_video_call_screen.dart';
-import 'package:gin_finans_app/src/values/app_colors.dart';
 
 import 'create_password_screen.dart';
 import 'custom_ui/stepper_view_widget.dart';
