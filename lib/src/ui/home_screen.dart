@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gin_finans_app/src/listeners/sub_screen_callback_listener.dart';
 import 'package:gin_finans_app/src/ui/email_registration_screen.dart';
@@ -46,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> with SubScreenCallbackListener 
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Visibility(visible:_index == 0,child: Container(height: 50, color: Theme.of(context).colorScheme.primary)),
+            Visibility(visible: _index == 0, child: Container(height: 50, color: Theme.of(context).colorScheme.primary)),
             StepperView(
               physics: const BouncingScrollPhysics(),
               currentStep: _index,
@@ -73,11 +75,17 @@ class _HomeScreenState extends State<HomeScreen> with SubScreenCallbackListener 
     }
   }
 
+  /*
+    Method to redirect to next step
+   */
   void goToNextStep() {
-    setState(() {
-      _stepInfoList[_index].state = StepperViewStepState.complete;
-      _index++;
-    });
+    if (_index == 3) {
+      _showThankYouDialog();
+    } else
+      setState(() {
+        _stepInfoList[_index].state = StepperViewStepState.complete;
+        _index++;
+      });
   }
 
   /*
@@ -103,4 +111,31 @@ class _HomeScreenState extends State<HomeScreen> with SubScreenCallbackListener 
     goToNextStep();
   }
 
+  Future<void> _showThankYouDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Thank You!'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Your account has been created successfully.'),
+                Text('We will verify your details for further process.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Ok'),
+              onPressed: () {
+                exit(0);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
