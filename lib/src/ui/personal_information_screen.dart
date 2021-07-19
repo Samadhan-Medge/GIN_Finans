@@ -39,70 +39,70 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: MediaQuery.removePadding(
-                    context: context,
-                    removeTop: true,
-                    child: ListView(
-                      shrinkWrap: false,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Personal Information", style: Theme.of(context).textTheme.bodyText1),
-                            SizedBox(height: 10.0),
-                            Text("Please fill in the information below and your goal for digital saving",
-                                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: AppDimensions.textSizeSmall)),
-                            SizedBox(height: 20.0),
-                            CustomDropDown(
-                              hint: 'Goal for activation',
-                              dropdownMenuItems: buildDropDownMenuItems(snapshot.data!.goalOfActivation),
-                              selectedItem: _selectedGoalItem ?? null,
-                              callBack: (selectedValue) {
-                                setState(() {
-                                  _selectedGoalItem = selectedValue;
-                                });
-                              },
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            CustomDropDown(
-                              hint: 'Monthly Income',
-                              dropdownMenuItems: buildDropDownMenuItems(snapshot.data!.monthlyIncome),
-                              selectedItem: _selectedMonthlyIncomeRange ?? null,
-                              callBack: (selectedValue) {
-                                setState(() {
-                                  _selectedMonthlyIncomeRange = selectedValue;
-                                });
-                              },
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            CustomDropDown(
-                              hint: 'Monthly Expense',
-                              dropdownMenuItems: buildDropDownMenuItems(snapshot.data!.monthlyExpense),
-                              selectedItem: _selectedMonthlyExpense ?? null,
-                              callBack: (selectedValue) {
-                                setState(() {
-                                  _selectedMonthlyExpense = selectedValue;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppDimensions.fieldSpacing),
+                    child: MediaQuery.removePadding(
+                      context: context,
+                      removeTop: true,
+                      child: ListView(
+                        shrinkWrap: false,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Personal Information", style: Theme.of(context).textTheme.bodyText1),
+                              SizedBox(height: 10.0),
+                              Text("Please fill in the information below and your goal for digital saving",
+                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: AppDimensions.textSizeSmall)),
+                              SizedBox(height: 20.0),
+                              CustomDropDown(
+                                hint: 'Goal for activation',
+                                dropdownMenuItems: buildDropDownMenuItems(snapshot.data!.goalOfActivation),
+                                selectedItem: _selectedGoalItem ?? null,
+                                callBack: (selectedValue) {
+                                  setState(() {
+                                    _selectedGoalItem = selectedValue;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              CustomDropDown(
+                                hint: 'Monthly Income',
+                                dropdownMenuItems: buildDropDownMenuItems(snapshot.data!.monthlyIncome),
+                                selectedItem: _selectedMonthlyIncomeRange ?? null,
+                                callBack: (selectedValue) {
+                                  setState(() {
+                                    _selectedMonthlyIncomeRange = selectedValue;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              CustomDropDown(
+                                hint: 'Monthly Expense',
+                                dropdownMenuItems: buildDropDownMenuItems(snapshot.data!.monthlyExpense),
+                                selectedItem: _selectedMonthlyExpense ?? null,
+                                callBack: (selectedValue) {
+                                  setState(() {
+                                    _selectedMonthlyExpense = selectedValue;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 Align(
                   alignment: FractionalOffset.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: NextButton(onClick: () {
-                      widget.subScreenCallbackListener.redirectToNextScreen(0);
-                    }),
-                  ),
+                  child: NextButton(onClick: () {
+                    widget.subScreenCallbackListener.redirectToNextScreen();
+                  }),
                 ),
               ],
             ),

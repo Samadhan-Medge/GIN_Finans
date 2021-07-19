@@ -76,12 +76,9 @@ class _ScheduleVideoCallScreenState extends State<ScheduleVideoCallScreen> with 
         ),
         Align(
           alignment: FractionalOffset.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: NextButton(onClick: () {
-              widget.subScreenCallbackListener.redirectToNextScreen(0);
-            }),
-          ),
+          child: NextButton(onClick: () {
+            widget.subScreenCallbackListener.redirectToNextScreen();
+          }),
         ),
       ],
     );

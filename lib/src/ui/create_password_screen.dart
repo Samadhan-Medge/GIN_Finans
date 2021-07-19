@@ -105,12 +105,9 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
           ),
           Align(
             alignment: FractionalOffset.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: NextButton(onClick: () {
-                widget.subScreenCallbackListener.redirectToNextScreen(0);
-              }),
-            ),
+            child: NextButton(onClick: () {
+              widget.subScreenCallbackListener.redirectToNextScreen();
+            }),
           ),
         ],
       ),

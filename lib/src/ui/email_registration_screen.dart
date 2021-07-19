@@ -115,17 +115,14 @@ class _EmailRegistrationScreenState extends State<EmailRegistrationScreen> {
               )),
           Align(
             alignment: FractionalOffset.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: NextButton(onClick: () {
-                if (bloc.validateEmailId(_emailController.text))
-                  widget.subScreenCallbackListener.redirectToNextScreen(0);
-                else {
-                  isEmailValid = false;
-                  _formKey.currentState!.validate();
-                }
-              }),
-            ),
+            child: NextButton(onClick: () {
+              if (bloc.validateEmailId(_emailController.text))
+                widget.subScreenCallbackListener.redirectToNextScreen();
+              else {
+                isEmailValid = false;
+                _formKey.currentState!.validate();
+              }
+            }),
           ),
         ],
       ),

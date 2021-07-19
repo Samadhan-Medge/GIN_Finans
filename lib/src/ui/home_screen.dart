@@ -99,13 +99,8 @@ class _HomeScreenState extends State<HomeScreen> with SubScreenCallbackListener 
   }
 
   @override
-  redirectToNextScreen(int currentScreenIndex) {
+  redirectToNextScreen() {
     goToNextStep();
   }
 
-  @override
-  redirectToPreviousScreen(int currentScreenIndex) {
-    _index = currentScreenIndex - 1;
-    goToPreviousStep();
-  }
 }
